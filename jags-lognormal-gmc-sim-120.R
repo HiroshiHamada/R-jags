@@ -7,7 +7,7 @@
 # Kruschke, J. K. (2015). Doing Bayesian Data Analysis, Second Edition:
 # A Tutorial with R, JAGS, and Stan. Academic Press / Elsevier.
 
-# ‚»‚à‚»‚àgmc‚ğMCMC„’è‚Å‚«‚Ä‚¢‚é‚Ì‚©‚Ç‚¤‚©‚ğlHƒf[ƒ^‚Åƒ`ƒFƒbƒN
+# ãã‚‚ãã‚‚gmcã‚’MCMCæ¨å®šã§ãã¦ã„ã‚‹ã®ã‹ã©ã†ã‹ã‚’äººå·¥ãƒ‡ãƒ¼ã‚¿ã§ãƒã‚§ãƒƒã‚¯
 
 # graphics.off()
 # rm(list=ls(all=TRUE))
@@ -21,10 +21,10 @@ graphFileType="png"
 # Generate a person's income under the given condition: 
 set.seed(47406)
 
-#data‚Ì•ªU‚ª‘«‚è‚È‚¢‚Ì‚ÅCp0‚ğŠm—¦•Ï”‰»‚·‚éD
+#dataã®åˆ†æ•£ãŒè¶³ã‚Šãªã„ã®ã§ï¼Œp0ã‚’ç¢ºç‡å¤‰æ•°åŒ–ã™ã‚‹ï¼
 
 gmi<-function(y1, b0, p0, n0){
-  #y1:‰Šú‘–{, b0:“Š‘Š„‡, p0:¬Œ÷Šm—¦, n0:”½•œ‰ñ”
+  #y1:åˆæœŸè³‡æœ¬, b0:æŠ•è³‡å‰²åˆ, p0:æˆåŠŸç¢ºç‡, n0:åå¾©å›æ•°
   y = y1
 for(i in 1:n0){
   if(runif(1) < p0 + rnorm(1,0,0.1)){
@@ -34,7 +34,7 @@ y
 }
 
 
-#^‚Ìƒpƒ‰ƒ[ƒ^İ’è  y1, b0, p0, n0
+#çœŸã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿è¨­å®š  y1, b0, p0, n0
 m=2000; y1=20; b0=0.1; p0=0.5; n0=10
 dat0<-c()
 
@@ -44,25 +44,25 @@ for(i in 1:m){dat0[i]<-gmi(y1, b0, p0, n0)}
 
 #data<-data.frame(x=dat0)
 
-head(dat0)#lHƒf[ƒ^‚ÌŠm”F
+head(dat0)#äººå·¥ãƒ‡ãƒ¼ã‚¿ã®ç¢ºèª
 hist(dat0,breaks = 20)
 
-#jags‚É“n‚·incomeƒf[ƒ^‚ğƒCƒ“ƒ|[ƒg‚·‚é.
+#jagsã«æ¸¡ã™incomeãƒ‡ãƒ¼ã‚¿ã‚’ã‚¤ãƒ³ãƒãƒ¼ãƒˆã™ã‚‹.
 # Package the data for shipping to JAGS:
 dataList = list(
 y = dat0,
 N = length(y) 
 )
 
-#,n=10#‰Šú’l’è”n = 10 #‰Šú’l’è”@ƒQ[ƒ€”½•œ‰ñ”
+#,n=10#åˆæœŸå€¤å®šæ•°n = 10 #åˆæœŸå€¤å®šæ•°ã€€ã‚²ãƒ¼ãƒ åå¾©å›æ•°
 head(dataList$y)
 hist(dataList$y,breaks=50)
 
 #------------------------------------------------------------------------------
-#jags‚É‚í‚½‚·ƒ‚ƒfƒ‹‚ğswichŠÖ”‚Å•¡”’è‹`‚·‚éD
-#model‚É‚ ‚í‚¹‚Ä„’è‚·‚éƒpƒ‰ƒ[ƒ^‚ÆƒAƒEƒgƒvƒbƒgŠÖ”‚à•ÏX
+#jagsã«ã‚ãŸã™ãƒ¢ãƒ‡ãƒ«ã‚’swiché–¢æ•°ã§è¤‡æ•°å®šç¾©ã™ã‚‹ï¼
+#modelã«ã‚ã‚ã›ã¦æ¨å®šã™ã‚‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã¨ã‚¢ã‚¦ãƒˆãƒ—ãƒƒãƒˆé–¢æ•°ã‚‚å¤‰æ›´
 
-#modelstring0‚Íƒpƒ‰ƒ[ƒ^‚ğn,y0,p,b,‚ğ‘S‚Ä„’è
+#modelstring0ã¯ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’n,y0,p,b,ã‚’å…¨ã¦æ¨å®š
 modelstring0 = "
 model{
 for( i in 1 : N ) {
@@ -70,15 +70,15 @@ y[i] ~ dlnorm(m, 1/(s^2))
 }
 m <- log(y0)+n*log(1-b)+log((1+b)/(1-b))*n*p
 s <- sqrt(n*p*(1-p)*(log((1+b)/(1-b)))^2)
-n ~ dpois(lamn)#n‚ğƒ|ƒAƒ\ƒ“•ª•z‚Å‹ß—
-lamn ~ dunif(5,20)#–‘Oî•ñ‚Æ‚µ‚Ä^‚Ìn0‚É‹ß‚¢î•ñ‚ğ—^‚¦‚é
+n ~ dpois(lamn)#nã‚’ãƒã‚¢ã‚½ãƒ³åˆ†å¸ƒã§è¿‘ä¼¼
+lamn ~ dunif(5,20)#äº‹å‰æƒ…å ±ã¨ã—ã¦çœŸã®n0ã«è¿‘ã„æƒ…å ±ã‚’ä¸ãˆã‚‹
 y0 ~ dpois(lamy0)#
-lamy0 ~ dunif(1,1000) #–‘Oî•ñ‚Æ‚µ‚Ä^‚Ìy0‚É‹ß‚¢î•ñ‚ğ—^‚¦‚é
-p ~ dbeta(1,1)#p,b‚Ì–‘O•ª•z‚ÉƒÀ•ª•z
+lamy0 ~ dunif(1,1000) #äº‹å‰æƒ…å ±ã¨ã—ã¦çœŸã®y0ã«è¿‘ã„æƒ…å ±ã‚’ä¸ãˆã‚‹
+p ~ dbeta(1,1)#p,bã®äº‹å‰åˆ†å¸ƒã«Î²åˆ†å¸ƒ
 b ~ dbeta(1,1)}"
 # close quote for modelstring
 
-#modelstring1‚Í—˜_“I‚ÉŒÅ’è‚·‚×‚«ƒpƒ‰ƒ[ƒ^n,y0,b‚ğ’è”‚É‚·‚é
+#modelstring1ã¯ç†è«–çš„ã«å›ºå®šã™ã¹ããƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿n,y0,bã‚’å®šæ•°ã«ã™ã‚‹
 #m=2000; y1=10; b0=0.2; p0=0.5; n0=15
 
 modelstring1 = "
@@ -97,7 +97,7 @@ p ~ dbeta(1,1)
 # close quote for modelstring
 # b ~ dbeta(1,1)
 
-#model‘I‘ğswitch
+#modelé¸æŠswitch
 a<-"1"
 
 modelstring<-switch(a,
@@ -126,10 +126,10 @@ parameters<-switch(a,
   "1"=parameters1)
 
 #parameters = c("p", "b","n","a","m","s","c","y0")
-adaptSteps = 1000         # ‰Šú’l1000 Number of steps to "tune" the samplers.
-burnInSteps = 1000        # ‰Šú’l1000 Number of steps to "burn-in" the samplers.
-nChains = 3               # ‰Šú’l3 Number of chains to run.
-numSavedSteps=20000       # ‰Šú’l20000 Total number of steps in chains to save.
+adaptSteps = 1000         # åˆæœŸå€¤1000 Number of steps to "tune" the samplers.
+burnInSteps = 1000        # åˆæœŸå€¤1000 Number of steps to "burn-in" the samplers.
+nChains = 3               # åˆæœŸå€¤3 Number of chains to run.
+numSavedSteps=20000       # åˆæœŸå€¤20000 Total number of steps in chains to save.
 thinSteps=1               # Number of steps to "thin" (1=keep every step).
 nPerChain = ceiling( ( numSavedSteps * thinSteps ) / nChains ) # Steps per chain.
 # Create, initialize, and adapt the model:
@@ -143,7 +143,7 @@ cat( "Sampling final MCMC chain...\n" )
 mcmcCoda = coda.samples( jagsModel , variable.names=parameters ,
                             n.iter=nPerChain , thin=thinSteps )
 
-#—ñ‚Íƒpƒ‰ƒ[ƒ^–ˆ‚Ìchain head(mcmcCoda)
+#åˆ—ã¯ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æ¯ã®chain head(mcmcCoda)
 
 #------------------------------------------------------------------------------
 # EXAMINE THE RESULTS
@@ -151,14 +151,14 @@ mcmcCoda = coda.samples( jagsModel , variable.names=parameters ,
 # Display diagnostics of chain, for specified parameters:
 parameterNames = varnames(mcmcCoda) # get all parameter names
 
-#ŒÂ•Ê‚Édisplay‚·‚é‚©‚Ç‚¤‚©‚ğŠÖ”show_p(1)‚ÅŒˆ‚ß‚é
-#show_p(0)‚È‚çdisplay‚È‚µ
+#å€‹åˆ¥ã«displayã™ã‚‹ã‹ã©ã†ã‹ã‚’é–¢æ•°show_p(1)ã§æ±ºã‚ã‚‹
+#show_p(0)ãªã‚‰displayãªã—
 
 show_p <-function(x){if (x==1){
 for ( parName in parameterNames ) {
   diagMCMC( codaObject=mcmcCoda , parName=parName ,
             saveName=fileNameRoot , saveType=graphFileType )
-}}}#diagMCMC‚ğ‘Sƒpƒ‰ƒ[ƒ^‚É“K—p‚·‚é‚©‚Ç‚¤‚©Œˆ‚ß‚é
+}}}#diagMCMCã‚’å…¨ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã«é©ç”¨ã™ã‚‹ã‹ã©ã†ã‹æ±ºã‚ã‚‹
 
 show_p(1)
 
@@ -166,16 +166,16 @@ show_p(1)
 mcmcChain = as.matrix( mcmcCoda )
 chainLength = NROW(mcmcChain)
 
-#ÅŒã‚Ì–Œã•ª•zo—Í,openGraph‚ÍKruschkeìŠÖ”
+#æœ€å¾Œã®äº‹å¾Œåˆ†å¸ƒå‡ºåŠ›,openGraphã¯Kruschkeä½œé–¢æ•°
 openGraph(width=20,height=12)#(width=10,height=6)
-layout(matrix(1:6,nrow=2,byrow=TRUE))#6•ªŠ„‚µ‚Ä•\¦
+layout(matrix(1:6,nrow=2,byrow=TRUE))#6åˆ†å‰²ã—ã¦è¡¨ç¤º
 # posterior predictive
 hist( dataList$y , xlab="y" , main="Data w. Post. Pred." , breaks=30 ,
       col="pink" , border="white" , prob=TRUE , cex.lab=1.5)
-#data‚ÌƒqƒXƒgƒOƒ‰ƒ€
+#dataã®ãƒ’ã‚¹ãƒˆã‚°ãƒ©ãƒ 
 
-pltIdx = floor(seq(1,chainLength,length=20))#„’èƒpƒ‰ƒ[ƒ^‚ğ‰½ŒÂg‚¤‚©
-xComb = seq( min(dataList$y) , max(dataList$y) , length=51 )#data‚ÌƒŒƒ“ƒW‚ğ51•ªŠ„xComb
+pltIdx = floor(seq(1,chainLength,length=20))#æ¨å®šãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’ä½•å€‹ä½¿ã†ã‹
+xComb = seq( min(dataList$y) , max(dataList$y) , length=51 )#dataã®ãƒ¬ãƒ³ã‚¸ã‚’51åˆ†å‰²xComb
 
 for ( chnIdx in pltIdx ) {
   lines( xComb ,
